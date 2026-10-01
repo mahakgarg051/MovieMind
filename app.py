@@ -7,14 +7,14 @@ import base64
 
 
 # ============================================================
-# PAGE CONFIGURATION
+# PAGE CONFIGURATION (MOBILE OPTIMIZED)
 # ============================================================
 
 st.set_page_config(
     page_title="Movie Mind - Netflix + IMDb AI Movie Recommendations",
     page_icon="🎬",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 
@@ -94,7 +94,7 @@ GREAT_MOVIES_BASE64 = get_image_base64(ASSETS_DIR / "great_movies_trans.png") or
 
 
 # ============================================================
-# CUSTOM CSS - NETFLIX + IMDb GLASSMORPHISM THEME
+# RESPONSIVE CSS - DESKTOP & MOBILE OPTIMIZED
 # ============================================================
 
 st.markdown(
@@ -102,17 +102,26 @@ st.markdown(
 /* Google Fonts: Poppins & Inter */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap');
 
-html, body, [class*="css"] {
-    font-family: 'Poppins', 'Inter', -apple-system, sans-serif;
+*, *::before, *::after {
+    box-sizing: border-box !important;
+}
+
+html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    margin: 0;
+    padding: 0;
 }
 
 .stApp {
+    font-family: 'Poppins', 'Inter', -apple-system, sans-serif;
     background:
         radial-gradient(ellipse at 85% 10%, rgba(147, 51, 234, 0.22) 0%, rgba(236, 72, 153, 0.12) 32%, transparent 65%),
         radial-gradient(circle at 10% 80%, rgba(236, 72, 153, 0.12) 0%, transparent 45%),
         radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.6) 0%, transparent 100%),
         #080914;
     color: #f1f5f9;
+    overflow-x: hidden !important;
 }
 
 .block-container {
@@ -121,7 +130,7 @@ html, body, [class*="css"] {
     max-width: 1380px !important;
 }
 
-/* Fixed Dark Sidebar */
+/* Sidebar */
 section[data-testid="stSidebar"] {
     background: #090c1a !important;
     border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -134,12 +143,13 @@ section[data-testid="stSidebar"] > div {
     padding-right: 1.1rem;
 }
 
-/* Form Selectboxes */
+/* Touch-friendly inputs */
 div[data-baseweb="select"] > div {
     background-color: #111528 !important;
     border: 1px solid rgba(255, 255, 255, 0.12) !important;
     border-radius: 12px !important;
     color: #ffffff !important;
+    min-height: 48px !important;
     transition: all 0.2s ease !important;
 }
 
@@ -162,6 +172,9 @@ div[data-baseweb="menu"] {
 
 div[data-baseweb="menu"] li {
     color: #cbd5e1 !important;
+    min-height: 42px !important;
+    display: flex !important;
+    align-items: center !important;
 }
 
 div[data-baseweb="menu"] li:hover {
@@ -169,7 +182,7 @@ div[data-baseweb="menu"] li:hover {
     color: #ffffff !important;
 }
 
-/* Action Button */
+/* Buttons */
 div.stButton > button {
     background: linear-gradient(90deg, #ec4899 0%, #a855f7 50%, #3b82f6 100%) !important;
     color: #ffffff !important;
@@ -177,7 +190,9 @@ div.stButton > button {
     font-size: 15px !important;
     border: none !important;
     border-radius: 12px !important;
-    padding: 10px 24px !important;
+    padding: 12px 24px !important;
+    min-height: 48px !important;
+    width: 100% !important;
     box-shadow: 0 4px 20px rgba(168, 85, 247, 0.45) !important;
     transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
@@ -207,6 +222,14 @@ h1, h2, h3, h4 {
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+    width: 100%;
+}
+
+.hero-projector-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    z-index: 1;
 }
 
 /* Statistics Cards */
@@ -222,6 +245,7 @@ h1, h2, h3, h4 {
     gap: 16px;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
+    width: 100%;
 }
 
 .stat-card:hover {
@@ -273,6 +297,17 @@ h1, h2, h3, h4 {
     align-items: center;
     gap: 26px;
     box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+    width: 100%;
+}
+
+.selected-poster-img {
+    width: 200px;
+    height: 165px;
+    object-fit: cover;
+    border-radius: 14px;
+    border: 1px solid rgba(168, 85, 247, 0.35);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
+    flex-shrink: 0;
 }
 
 /* IMDb Chip */
@@ -338,7 +373,7 @@ h1, h2, h3, h4 {
 .badge-runtime {
     background: rgba(16, 185, 129, 0.16);
     color: #6ee7b7;
-    border: 1px solid rgba(168, 85, 247, 0.32);
+    border: 1px solid rgba(16, 185, 129, 0.32);
 }
 
 /* Movie Information Panel */
@@ -347,12 +382,11 @@ h1, h2, h3, h4 {
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 14px;
     padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
     gap: 12px;
-    flex-wrap: wrap;
     margin-top: 14px;
+    width: 100%;
 }
 
 .movie-info-item {
@@ -361,7 +395,7 @@ h1, h2, h3, h4 {
     gap: 2px;
 }
 
-/* Recommendation Card with Smooth Hover Zoom */
+/* Recommendation Card */
 .rec-card {
     position: relative;
     background: linear-gradient(145deg, rgba(18, 22, 46, 0.8) 0%, rgba(12, 15, 32, 0.85) 100%);
@@ -376,12 +410,23 @@ h1, h2, h3, h4 {
     flex-direction: column;
     gap: 10px;
     overflow: hidden;
+    width: 100%;
 }
 
 .rec-card:hover {
     transform: translateY(-5px) scale(1.025);
     border-color: rgba(236, 72, 153, 0.55);
     box-shadow: 0 14px 34px rgba(236, 72, 153, 0.28), 0 0 18px rgba(168, 85, 247, 0.25);
+}
+
+.rec-poster-img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid rgba(168, 85, 247, 0.35);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    display: block;
 }
 
 .rec-card-badge {
@@ -411,6 +456,7 @@ h1, h2, h3, h4 {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    width: 100%;
 }
 
 .step-pill {
@@ -446,11 +492,129 @@ h1, h2, h3, h4 {
     align-items: center;
     gap: 12px;
     transition: all 0.25s ease;
+    width: 100%;
 }
 
 .pop-card:hover {
     border-color: rgba(236, 72, 153, 0.45);
     transform: translateY(-2px);
+}
+
+.pop-poster-img {
+    width: 58px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 7px;
+    flex-shrink: 0;
+}
+
+
+/* ============================================================
+   MOBILE RESPONSIVE OVERRIDES (max-width: 768px)
+   ============================================================ */
+
+@media (max-width: 768px) {
+    /* Full mobile width with minimal side padding */
+    .block-container {
+        padding-left: 0.6rem !important;
+        padding-right: 0.6rem !important;
+        padding-top: 0.8rem !important;
+        padding-bottom: 2rem !important;
+        max-width: 100vw !important;
+    }
+
+    /* Force all Streamlit columns to stack vertically on mobile */
+    div[data-testid="column"] {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+        min-width: 100% !important;
+        margin-bottom: 12px !important;
+    }
+
+    /* Smaller responsive headings */
+    h1 {
+        font-size: 26px !important;
+    }
+    h2 {
+        font-size: 20px !important;
+    }
+    h3 {
+        font-size: 17px !important;
+    }
+
+    /* Hero section: stack on phones */
+    .hero-banner {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        padding: 18px 14px !important;
+        gap: 14px !important;
+    }
+
+    .hero-banner > div:first-child {
+        align-items: center !important;
+    }
+
+    .hero-projector-wrap {
+        display: none !important;
+    }
+
+    /* Selected Movie Card: Stack vertically */
+    .selected-movie-card {
+        flex-direction: column !important;
+        padding: 16px 14px !important;
+        gap: 16px !important;
+        text-align: center !important;
+    }
+
+    .selected-poster-img {
+        width: 100% !important;
+        max-width: 290px !important;
+        height: 180px !important;
+        margin: 0 auto !important;
+    }
+
+    .selected-movie-card > div:nth-child(2) {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    /* Badges wrap neatly and center on mobile */
+    .selected-movie-card .netflix-badge {
+        font-size: 10px !important;
+        padding: 4px 8px !important;
+    }
+
+    .movie-info-panel {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+        text-align: left !important;
+    }
+
+    /* Recommendation card: single column, larger touch-friendly poster */
+    .rec-card {
+        padding: 14px !important;
+        margin-bottom: 14px !important;
+    }
+
+    .rec-poster-img {
+        height: 190px !important;
+    }
+
+    /* Full-width tap button */
+    div.stButton > button {
+        width: 100% !important;
+        min-height: 50px !important;
+        font-size: 16px !important;
+    }
+
+    /* Statistics cards */
+    .stat-card {
+        padding: 14px 16px !important;
+        margin-bottom: 8px !important;
+    }
 }
 </style>""",
     unsafe_allow_html=True
@@ -578,7 +742,7 @@ GRADIENT_PALETTES = [
 ]
 
 
-def get_movie_poster_html(movie_title, width=80, height=66, border_radius=8, font_size=10):
+def get_movie_poster_html(movie_title, img_class="rec-poster-img"):
     clean_title = str(movie_title).strip()
     poster_file = POSTER_MAP.get(clean_title)
 
@@ -588,11 +752,11 @@ def get_movie_poster_html(movie_title, width=80, height=66, border_radius=8, fon
     if poster_file and Path(poster_file).exists():
         b64 = get_image_base64(poster_file)
         if b64:
-            return f'<img src="{b64}" alt="{clean_title}" style="width:{width}px; height:{height}px; min-width:{width}px; object-fit:cover; border-radius:{border_radius}px; border:1px solid rgba(168,85,247,0.35); box-shadow:0 6px 20px rgba(0,0,0,0.55); flex-shrink:0;" />'
+            return f'<img src="{b64}" alt="{clean_title}" class="{img_class}" />'
 
     idx = sum(ord(c) for c in clean_title) % len(GRADIENT_PALETTES)
     g1, g2 = GRADIENT_PALETTES[idx]
-    return f'<div style="width:{width}px; height:{height}px; min-width:{width}px; border-radius:{border_radius}px; background:linear-gradient(145deg, {g1}, {g2}); border:1px solid rgba(255,255,255,0.12); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:6px; text-align:center; position:relative; overflow:hidden; box-shadow:0 4px 14px rgba(0,0,0,0.45); flex-shrink:0;"><div style="font-size:20px; filter:drop-shadow(0 0 6px rgba(168,85,247,0.6));">🎬</div><div style="font-size:{font_size}px; font-weight:700; color:#ffffff; line-height:1.15; margin-top:4px; max-height:26px; overflow:hidden; text-overflow:ellipsis;">{clean_title}</div></div>'
+    return f'<div class="{img_class}" style="background:linear-gradient(145deg, {g1}, {g2}); border:1px solid rgba(255,255,255,0.12); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:8px; text-align:center;"><div style="font-size:22px;">🎬</div><div style="font-size:11px; font-weight:700; color:#ffffff; margin-top:4px;">{clean_title}</div></div>'
 
 
 # ============================================================
@@ -649,7 +813,7 @@ def recommend_similar_movies(movie_title, n=5):
 
 
 # ============================================================
-# SIDEBAR
+# SIDEBAR (COLLAPSED BY DEFAULT ON MOBILE)
 # ============================================================
 
 with st.sidebar:
@@ -676,7 +840,7 @@ Netflix + IMDb AI Engine
         unsafe_allow_html=True
     )
 
-    # Glowing Navigation Menu
+    # Navigation Menu
     st.markdown(
         """<div style="display:flex; flex-direction:column; gap:6px; margin-bottom:28px;">
 <div style="display:flex; align-items:center; gap:12px; padding:11px 16px; border-radius:12px; background:linear-gradient(90deg, #ec4899, #a855f7, #3b82f6); color:white; font-weight:700; font-size:13.5px; box-shadow:0 4px 20px rgba(236,72,153,0.45); cursor:pointer;">
@@ -724,38 +888,38 @@ Netflix + IMDb AI Engine
 # ============================================================
 
 hero_logo_tag = (
-    f'<img src="{LOGO_BASE64}" style="width:52px; height:52px; object-fit:contain; filter:drop-shadow(0 0 14px rgba(236,72,153,0.8));" />'
+    f'<img src="{LOGO_BASE64}" style="width:48px; height:48px; object-fit:contain; filter:drop-shadow(0 0 14px rgba(236,72,153,0.8));" />'
     if LOGO_BASE64 else
-    '<div style="width:52px; height:52px; border-radius:14px; background:linear-gradient(135deg, #ec4899, #a855f7); display:flex; align-items:center; justify-content:center; font-size:26px; box-shadow:0 0 16px rgba(236,72,153,0.6);">🎬</div>'
+    '<div style="width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg, #ec4899, #a855f7); display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 0 16px rgba(236,72,153,0.6);">🎬</div>'
 )
 
 hero_projector_tag = (
-    f'<img src="{PROJECTOR_BASE64}" style="height:120px; object-fit:contain; mix-blend-mode:screen; opacity:0.95;" />'
+    f'<img src="{PROJECTOR_BASE64}" style="height:110px; object-fit:contain; mix-blend-mode:screen; opacity:0.95;" />'
     if PROJECTOR_BASE64 else
-    '<div style="font-size:60px; opacity:0.4; filter:drop-shadow(0 0 20px rgba(56,189,248,0.5));">🎥✨</div>'
+    ''
 )
 
 st.markdown(
     f"""<div class="hero-banner">
-<div style="display:flex; flex-direction:column; gap:6px; z-index:2;">
-<div style="display:flex; align-items:center; gap:16px;">
+<div style="display:flex; flex-direction:column; gap:6px; z-index:2; flex:1;">
+<div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
 {hero_logo_tag}
 <div>
-<div style="font-size:36px; font-weight:800; letter-spacing:-0.5px; line-height:1.1;">
+<div class="hero-title" style="font-size:32px; font-weight:800; letter-spacing:-0.5px; line-height:1.1;">
 <span style="color:#ffffff;">Movie</span>
 <span style="background:linear-gradient(135deg, #ec4899, #a855f7, #38bdf8); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Mind</span>
 </div>
-<div style="font-size:14.5px; font-weight:600; color:#e2e8f0; margin-top:2px; display:flex; align-items:center; gap:8px;">
+<div style="font-size:13.5px; font-weight:600; color:#e2e8f0; margin-top:2px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
 <span>Your taste. Our intelligence.</span>
-<span style="background:rgba(236,72,153,0.25); color:#f472b6; border:1px solid rgba(236,72,153,0.4); font-size:10px; font-weight:700; padding:2px 8px; border-radius:6px; text-transform:uppercase;">AI Powered</span>
+<span style="background:rgba(236,72,153,0.25); color:#f472b6; border:1px solid rgba(236,72,153,0.4); font-size:10px; font-weight:700; padding:2px 8px; border-radius:6px; text-transform:uppercase;">AI Engine</span>
 </div>
 </div>
 </div>
-<div style="font-size:14px; color:#94a3b8; margin-top:4px;">
+<div style="font-size:13px; color:#94a3b8; margin-top:4px;">
 Discover movies similar to the ones you love, backed by collaborative rating intelligence.
 </div>
 </div>
-<div style="display:flex; align-items:center; justify-content:flex-end; z-index:1;">
+<div class="hero-projector-wrap">
 {hero_projector_tag}
 </div>
 </div>""",
@@ -764,7 +928,7 @@ Discover movies similar to the ones you love, backed by collaborative rating int
 
 
 # ============================================================
-# STATISTICS SECTION (REQUIREMENT 14)
+# STATISTICS SECTION (STACKS VERTICALLY ON MOBILE)
 # ============================================================
 
 total_movies_count = len(movie_user_matrix)
@@ -778,8 +942,8 @@ with stat_c1:
 <div class="stat-icon icon-movies">🎬</div>
 <div>
 <div style="color:#94a3b8; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Total Movies</div>
-<div style="color:#ffffff; font-size:24px; font-weight:800; line-height:1.2;">{total_movies_count:,}</div>
-<div style="color:#ec4899; font-size:11px; font-weight:600; margin-top:2px;">↑ Active Catalog</div>
+<div style="color:#ffffff; font-size:22px; font-weight:800; line-height:1.2;">{total_movies_count:,}</div>
+<div style="color:#ec4899; font-size:10.5px; font-weight:600; margin-top:2px;">↑ Active Catalog</div>
 </div>
 </div>""",
         unsafe_allow_html=True
@@ -791,8 +955,8 @@ with stat_c2:
 <div class="stat-icon icon-clusters">🧠</div>
 <div>
 <div style="color:#94a3b8; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Total Clusters</div>
-<div style="color:#ffffff; font-size:24px; font-weight:800; line-height:1.2;">{clusters_count}</div>
-<div style="color:#a855f7; font-size:11px; font-weight:600; margin-top:2px;">↑ K-Means Groups</div>
+<div style="color:#ffffff; font-size:22px; font-weight:800; line-height:1.2;">{clusters_count}</div>
+<div style="color:#a855f7; font-size:10.5px; font-weight:600; margin-top:2px;">↑ K-Means Groups</div>
 </div>
 </div>""",
         unsafe_allow_html=True
@@ -804,8 +968,8 @@ with stat_c3:
 <div class="stat-icon icon-method">⚡</div>
 <div>
 <div style="color:#94a3b8; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Method</div>
-<div style="color:#ffffff; font-size:18px; font-weight:800; line-height:1.2;">K-Means + Cosine</div>
-<div style="color:#06b6d4; font-size:11px; font-weight:600; margin-top:2px;">↑ Collaborative AI</div>
+<div style="color:#ffffff; font-size:17px; font-weight:800; line-height:1.2;">K-Means + Cosine</div>
+<div style="color:#06b6d4; font-size:10.5px; font-weight:600; margin-top:2px;">↑ Collaborative AI</div>
 </div>
 </div>""",
         unsafe_allow_html=True
@@ -817,8 +981,8 @@ with stat_c4:
 <div class="stat-icon icon-rating">⭐</div>
 <div>
 <div style="color:#94a3b8; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Avg Dataset Rating</div>
-<div style="color:#ffffff; font-size:24px; font-weight:800; line-height:1.2;">{DATASET_AVG_RATING:.1f} <span style="font-size:14px; color:#f59e0b;">/10</span></div>
-<div style="color:#f59e0b; font-size:11px; font-weight:600; margin-top:2px;">★ {DATASET_AVG_RATING/2:.1f}/5 IMDb Mean</div>
+<div style="color:#ffffff; font-size:22px; font-weight:800; line-height:1.2;">{DATASET_AVG_RATING:.1f} <span style="font-size:13px; color:#f59e0b;">/10</span></div>
+<div style="color:#f59e0b; font-size:10.5px; font-weight:600; margin-top:2px;">★ {DATASET_AVG_RATING/2:.1f}/5 IMDb Mean</div>
 </div>
 </div>""",
         unsafe_allow_html=True
@@ -830,12 +994,12 @@ with stat_c4:
 # ============================================================
 
 st.markdown(
-    """<div style="margin-top:22px; margin-bottom:8px;">
+    """<div style="margin-top:20px; margin-bottom:8px;">
 <div style="display:flex; align-items:center; gap:8px;">
-<span style="font-size:22px;">🍿</span>
-<span style="font-size:20px; font-weight:700; color:#ffffff;">Choose a Movie</span>
+<span style="font-size:20px;">🍿</span>
+<span style="font-size:18px; font-weight:700; color:#ffffff;">Choose a Movie</span>
 </div>
-<div style="color:#94a3b8; font-size:13px; margin-top:2px;">
+<div style="color:#94a3b8; font-size:12.5px; margin-top:2px;">
 Select a movie to inspect its IMDb metadata and discover matching recommendations with similar user rating patterns.
 </div>
 </div>""",
@@ -870,7 +1034,7 @@ with ctrl_c3:
 
 
 # ============================================================
-# SELECTED MOVIE (REQUIREMENTS 3, 4, 5, 8, 15) & HOW IT WORKS
+# SELECTED MOVIE (RESPONSIVE VERTICAL STACK ON MOBILE)
 # ============================================================
 
 st.markdown('<div style="height:10px;"></div>', unsafe_allow_html=True)
@@ -883,15 +1047,10 @@ selected_genre = selected_meta["Genre"]
 selected_year = selected_meta["Release_Year"]
 selected_lang = selected_meta["Language"]
 selected_runtime = selected_meta["Runtime_Minutes"]
-selected_ratings_count = selected_meta["Number_of_Ratings"]
 
-# Poster HTML for large display (approx 200px x 165px)
 selected_poster_html = get_movie_poster_html(
     selected_movie,
-    width=200,
-    height=165,
-    border_radius=14,
-    font_size=13
+    img_class="selected-poster-img"
 )
 
 # Rating stars HTML
@@ -911,14 +1070,16 @@ sel_col, how_col = st.columns([6.4, 3.6])
 
 with sel_col:
     st.markdown(
-        f"""<div style="font-size:17px; font-weight:700; color:#ffffff; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+        f"""<div style="font-size:16px; font-weight:700; color:#ffffff; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
 <span>🎬</span> Selected Movie Overview
 </div>
 <div class="selected-movie-card">
+<div class="selected-movie-poster-wrap">
 {selected_poster_html}
+</div>
 <div style="flex:1; min-width:0;">
-<div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:6px;">
-<div style="font-size:26px; font-weight:800; color:#ffffff; letter-spacing:-0.5px; line-height:1.2;">
+<div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:6px; flex-wrap:wrap;">
+<div style="font-size:24px; font-weight:800; color:#ffffff; letter-spacing:-0.4px; line-height:1.2;">
 {selected_movie}
 </div>
 {circular_badge_html}
@@ -927,7 +1088,7 @@ with sel_col:
 {imdb_chip_html}
 <div>{stars_markup}</div>
 </div>
-<div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+<div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px;">
 <span class="netflix-badge badge-genre">🎭 {selected_genre}</span>
 <span class="netflix-badge badge-lang">🌐 {selected_lang}</span>
 <span class="netflix-badge badge-year">📅 {selected_year}</span>
@@ -936,23 +1097,23 @@ with sel_col:
 <div class="movie-info-panel">
 <div class="movie-info-item">
 <span style="color:#94a3b8; font-size:10px; font-weight:600; text-transform:uppercase;">⏱️ Runtime</span>
-<span style="color:#ffffff; font-size:12.5px; font-weight:700;">{selected_runtime} min</span>
+<span style="color:#ffffff; font-size:12px; font-weight:700;">{selected_runtime} min</span>
 </div>
 <div class="movie-info-item">
 <span style="color:#94a3b8; font-size:10px; font-weight:600; text-transform:uppercase;">🌐 Language</span>
-<span style="color:#ffffff; font-size:12.5px; font-weight:700;">{selected_lang}</span>
+<span style="color:#ffffff; font-size:12px; font-weight:700;">{selected_lang}</span>
 </div>
 <div class="movie-info-item">
 <span style="color:#94a3b8; font-size:10px; font-weight:600; text-transform:uppercase;">🎭 Genre</span>
-<span style="color:#ffffff; font-size:12.5px; font-weight:700;">{selected_genre}</span>
+<span style="color:#ffffff; font-size:12px; font-weight:700;">{selected_genre}</span>
 </div>
 <div class="movie-info-item">
 <span style="color:#94a3b8; font-size:10px; font-weight:600; text-transform:uppercase;">📅 Release Year</span>
-<span style="color:#ffffff; font-size:12.5px; font-weight:700;">{selected_year}</span>
+<span style="color:#ffffff; font-size:12px; font-weight:700;">{selected_year}</span>
 </div>
 <div class="movie-info-item">
 <span style="color:#94a3b8; font-size:10px; font-weight:600; text-transform:uppercase;">⭐ Avg Rating</span>
-<span style="color:#f59e0b; font-size:12.5px; font-weight:700;">{rating_num_text}</span>
+<span style="color:#f59e0b; font-size:12px; font-weight:700;">{rating_num_text}</span>
 </div>
 </div>
 </div>
@@ -962,7 +1123,7 @@ with sel_col:
 
 with how_col:
     st.markdown(
-        """<div style="font-size:17px; font-weight:700; color:#ffffff; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+        """<div style="font-size:16px; font-weight:700; color:#ffffff; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
 <span>💡</span> How Movie Mind Works
 </div>
 <div class="how-it-works-card">
@@ -992,7 +1153,7 @@ with how_col:
 
 
 # ============================================================
-# MOVIES YOU MAY LIKE (REQUIREMENTS 6, 7, 8, 9, 10, 11)
+# MOVIES YOU MAY LIKE (SINGLE COLUMN ON MOBILE, MULTI ON DESKTOP)
 # ============================================================
 
 recommendations = recommend_similar_movies(selected_movie, number_of_movies)
@@ -1000,16 +1161,16 @@ recommendations = recommend_similar_movies(selected_movie, number_of_movies)
 st.markdown('<div style="height:18px;"></div>', unsafe_allow_html=True)
 
 st.markdown(
-    """<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+    """<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
 <div>
-<div style="font-size:20px; font-weight:700; color:#ffffff; display:flex; align-items:center; gap:8px;">
+<div style="font-size:19px; font-weight:700; color:#ffffff; display:flex; align-items:center; gap:8px;">
 <span>❤️</span> Movies You May Like
 </div>
-<div style="color:#94a3b8; font-size:13px; margin-top:2px;">
+<div style="color:#94a3b8; font-size:12.5px; margin-top:2px;">
 Personalized Netflix-style picks matching your selected title's cluster and cosine similarity.
 </div>
 </div>
-<div style="color:#ec4899; font-size:13px; font-weight:700; cursor:pointer;">
+<div style="color:#ec4899; font-size:12.5px; font-weight:700; cursor:pointer;">
 View All Recommendations →
 </div>
 </div>""",
@@ -1040,13 +1201,10 @@ else:
         rec_year = rec_meta["Release_Year"]
         rec_lang = rec_meta["Language"]
 
-        # Poster thumbnail
+        # Responsive poster
         poster_thumb = get_movie_poster_html(
             rec_title,
-            width=210,
-            height=135,
-            border_radius=10,
-            font_size=11
+            img_class="rec-poster-img"
         )
 
         # Star rating markup
@@ -1054,19 +1212,19 @@ else:
 
         # IMDb chip
         imdb_badge = (
-            f'<span class="imdb-chip" style="font-size:10px; padding:2px 6px;">★ {rec_rating:.1f}</span>'
+            f'<span class="imdb-chip" style="font-size:9.5px; padding:2px 5px;">★ {rec_rating:.1f}</span>'
             if rec_rating is not None else
-            '<span class="imdb-chip" style="background:#64748b; color:#fff; font-size:10px; padding:2px 6px;">N/A</span>'
+            '<span class="imdb-chip" style="background:#64748b; color:#fff; font-size:9.5px; padding:2px 5px;">N/A</span>'
         )
 
         with target_col:
             st.markdown(
                 f"""<div class="rec-card">
 <div class="rec-card-badge">✨ Recommended For You</div>
-<div style="width:100%; display:flex; justify-content:center;">
+<div style="width:100%; overflow:hidden; border-radius:10px;">
 {poster_thumb}
 </div>
-<div style="flex:1; min-width:0;">
+<div style="flex:1; min-width:0; width:100%;">
 <div style="font-size:15px; font-weight:700; color:#ffffff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{rec_title}">
 {rec_title}
 </div>
@@ -1074,14 +1232,14 @@ else:
 <div>{star_html}</div>
 {imdb_badge}
 </div>
-<div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
-<span class="netflix-badge badge-genre" style="font-size:9.5px; padding:2px 6px;">{rec_genre}</span>
-<span class="netflix-badge badge-lang" style="font-size:9.5px; padding:2px 6px;">{rec_lang}</span>
-<span class="netflix-badge badge-year" style="font-size:9.5px; padding:2px 6px;">{rec_year}</span>
+<div style="display:flex; gap:5px; flex-wrap:wrap; margin-top:8px;">
+<span class="netflix-badge badge-genre" style="font-size:9px; padding:2px 6px;">{rec_genre}</span>
+<span class="netflix-badge badge-lang" style="font-size:9px; padding:2px 6px;">{rec_lang}</span>
+<span class="netflix-badge badge-year" style="font-size:9px; padding:2px 6px;">{rec_year}</span>
 </div>
 <div style="margin-top:10px;">
 <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px;">
-<span style="color:#94a3b8;">Similarity</span>
+<span style="color:#94a3b8;">🎯 Similarity</span>
 <span style="color:#38bdf8; font-weight:700;">{sim_pct:.1f}% Match</span>
 </div>
 <div style="height:5px; background:rgba(255,255,255,0.08); border-radius:3px; overflow:hidden; margin-top:4px;">
@@ -1101,7 +1259,7 @@ else:
 st.markdown('<div style="height:16px;"></div>', unsafe_allow_html=True)
 
 st.markdown(
-    """<div style="font-size:20px; font-weight:700; color:#ffffff; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+    """<div style="font-size:19px; font-weight:700; color:#ffffff; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
 <span>🔥</span> Trending on Movie Mind
 </div>""",
     unsafe_allow_html=True
@@ -1124,10 +1282,7 @@ for i, (pop_movie, count) in enumerate(popular_movies.items()):
     with pop_cols[i]:
         pop_poster_thumb = get_movie_poster_html(
             pop_movie,
-            width=58,
-            height=48,
-            border_radius=7,
-            font_size=8
+            img_class="pop-poster-img"
         )
 
         st.markdown(
@@ -1150,15 +1305,15 @@ with pop_cols[5]:
     if GREAT_MOVIES_BASE64:
         st.markdown(
             f"""<div style="display:flex; align-items:center; justify-content:center; height:100%;">
-<img src="{GREAT_MOVIES_BASE64}" style="max-height:55px; object-fit:contain;" />
+<img src="{GREAT_MOVIES_BASE64}" style="max-height:50px; object-fit:contain;" />
 </div>""",
             unsafe_allow_html=True
         )
     else:
         st.markdown(
             """<div style="display:flex; align-items:center; gap:8px; height:100%; justify-content:center;">
-<span style="font-size:22px;">🎬</span>
-<span style="font-family:'Caveat', cursive; font-size:16px; color:#ec4899; font-weight:700; text-shadow:0 0 8px rgba(236,72,153,0.5);">
+<span style="font-size:20px;">🎬</span>
+<span style="font-family:'Caveat', cursive; font-size:15px; color:#ec4899; font-weight:700; text-shadow:0 0 8px rgba(236,72,153,0.5);">
 Great movies find you
 </span>
 </div>""",
@@ -1173,7 +1328,7 @@ Great movies find you
 st.markdown('<div style="height:26px;"></div>', unsafe_allow_html=True)
 
 st.markdown(
-    """<div style="text-align:center; padding:22px 0; border-top:1px solid rgba(255,255,255,0.08); color:#64748b; font-size:12px; display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap;">
+    """<div style="text-align:center; padding:22px 0; border-top:1px solid rgba(255,255,255,0.08); color:#64748b; font-size:11.5px; display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap;">
 <span>🎬</span>
 <span style="color:#ffffff; font-weight:700;">Movie Mind</span>
 <span>•</span>
@@ -1181,7 +1336,7 @@ st.markdown(
 <span>•</span>
 <span>K-Means Clustering + Cosine Similarity</span>
 <span>•</span>
-<span>Powered by Machine Learning</span>
+<span>Mobile & Desktop Optimized</span>
 </div>""",
     unsafe_allow_html=True
 )
